@@ -163,10 +163,9 @@ mod test_day04 {
         body::Body,
         http::{self, Request, StatusCode},
     };
+    use http_body_util::BodyExt;
     use serde_json::{json, Value};
     use tower::ServiceExt;
-
-    use hyper::body;
 
     use super::*;
 
@@ -213,7 +212,7 @@ mod test_day04 {
         assert_eq!(response.status(), StatusCode::OK);
 
         let body: Value =
-            serde_json::from_slice(&body::to_bytes(response.into_body()).await.unwrap()[..])
+            serde_json::from_slice(&response.into_body().collect().await.unwrap().to_bytes()[..])
                 .unwrap();
 
         assert_eq!(
