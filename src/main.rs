@@ -2,6 +2,7 @@ use axum::{http::StatusCode, response::IntoResponse, routing::get, Router};
 
 mod day01;
 mod day04;
+mod day06;
 
 async fn hello_world() -> &'static str {
     "Hello, world!"
@@ -17,7 +18,8 @@ async fn main() -> shuttle_axum::ShuttleAxum {
         .route("/", get(hello_world))
         .route("/-1/error", get(respond_error))
         .route("/1/*key", get(day01::part1))
-        .merge(day04::routes());
+        .merge(day04::routes())
+        .nest("/6", day06::routes());
 
     Ok(router.into())
 }
